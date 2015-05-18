@@ -1,0 +1,11 @@
+# Slave zones from froxlor host {{ froxlor_host }} - {{ master_ip }}
+
+{% for domain in domains %}
+zone "{{ domain.getDomain() }}" {
+  type slave;
+  file "{{ domain.getDomain() }}";
+  masters { {{ master_ip }}; };
+  allow-transfer { none; };
+};
+
+{% endfor %}

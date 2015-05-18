@@ -1,0 +1,30 @@
+{
+    "name": "cooperaj/froxlor_contrib_commands",
+    "description": "Additional commands for the generation of system files from the Froxlor database",
+    "version": "0.1.0",
+    "require": {
+        "symfony/console": "^2.6",
+        "symfony/config": "^2.6",
+        "symfony/yaml": "^2.6",
+        "twig/twig": "^1.18",
+        "doctrine/orm": "^2.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adam Cooper",
+            "email": "adam@networkpie.co.uk"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Froxlor\\": "src/Froxlor/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "chmod a+x app/console"
+        ]
+    }
+}
