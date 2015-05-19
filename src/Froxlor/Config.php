@@ -6,7 +6,7 @@ class Config
 {
     protected $configValues;
 
-    public function __construct($configDir)
+    public function __construct($configDir = CONFIG_DIR)
     {
         $locator = new FileLocator([$configDir]);
 
