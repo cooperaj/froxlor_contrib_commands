@@ -1,34 +1,29 @@
 <?php
 
+DEFINE('APP_DIR', __DIR__);
+DEFINE('SRC_DIR', APP_DIR . '/../src');
+
 require __DIR__ . '/../vendor/autoload.php';
 
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
-use Froxlor\YamlConfigurationLoader;
+// setup DI container
+$container = new ContainerBuilder();
 
-// directories of config files
-$directories = [__DIR__ . '/config'];
-$locator = new FileLocator($directories);
+$container->setParameter('configuration.directory', APP_DIR . '/config');
+$container->register('config', '\Froxlor\Config')
+    ->addArgument('%configuration.directory%');
 
-// convert the config file into an array
-$loader = new YamlConfigurationLoader($locator);
-$configValues = $loader->load($locator->locate('parameters.yml'));
+$container->register('db', '\Froxlor\Database')
+    ->addArgument(new Reference('config'));
 
-// doctrine
-$doctrineConfig =
-    Setup::createAnnotationMetadataConfiguration([__DIR__ . '/../src/Froxlor/Entity'], true);
-$doctrineParams = [
-    'driver' => $configValues['parameters']['database_driver'],
-    'user' => $configValues['parameters']['database_user'],
-    'password' => $configValues['parameters']['database_password'],
-    'dbname' => $configValues['parameters']['database_name'],
-    'host' => $configValues['parameters']['database_host'],
-    'port' => $configValues['parameters']['database_port']
-];
-$entityManager = EntityManager::create($doctrineParams, $doctrineConfig);
+$container->register('template', '\Froxlor\Template');
 
+$container->register(
+    'cmd_bindSlaveConfiguration',
+    '\Froxlor\Command\BindSlaveConfigurationCommand'
+)
+    ->addMethodCall('setContainer', [new Reference('service_container')]);
 
-$twigLoader = new Twig_Loader_Filesystem(__DIR__ . '/../src/Froxlor/Resources/Views');
-$twig = new Twig_Environment($twigLoader);
+$container->compile();

@@ -25,14 +25,14 @@ class BindSlaveConfigurationCommand extends BaseCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        global $twig;
-        global $entityManager;
+        $template = $this->container->get('template');
+        $db = $this->container->get('db');
 
-        $domains = $entityManager
+        $domains = $db
             ->getRepository('Froxlor\Entity\Domain')
             ->findAll();
 
-        $zones = $twig->render(
+        $zones = $template->render(
             'BindSlave.twig',
             [
                 'domains' => $domains,
