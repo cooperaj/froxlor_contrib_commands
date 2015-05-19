@@ -1,4 +1,3 @@
-app/config/*
-!app/config/*.dist
+app/config/parameters.yml
 
 vendor

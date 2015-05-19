@@ -1,0 +1,10 @@
+services:
+  config:
+    class:     \Froxlor\Config
+
+  db:
+    class:     \Froxlor\Database
+    arguments: ['@config']
+
+  template:
+    class:     \Froxlor\Template
