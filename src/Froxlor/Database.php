@@ -9,7 +9,6 @@ class Database
 
     public function __construct(Config $configuration)
     {
-
         $doctrineConfig =
             Setup::createAnnotationMetadataConfiguration([SRC_DIR . '/Froxlor/Entity'], true);
 
